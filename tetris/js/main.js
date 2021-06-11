@@ -13,7 +13,7 @@ function setup() {
 function draw() {
     background(0);
 
-    board.draw(50);
+    board.draw((height * 0.8) / board.height);
 
     // let drop = true;
     // if (Date.now() - lastDropTime > 100) {
