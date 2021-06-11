@@ -13,7 +13,7 @@ function setup() {
 function draw() {
     background(0);
 
-    board.draw(20);
+    board.draw(50);
 
     // let drop = true;
     // if (Date.now() - lastDropTime > 100) {
@@ -31,6 +31,7 @@ function draw() {
     textSize(30);
     if (frameCount % 30 == 0) currFramerate = int(frameRate());
     text(`fps: ${currFramerate}`, 10, 10, 100, 30);
+    text('debug build', 10, 50, 600, 30);
 }
 
 function windowResized() {

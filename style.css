@@ -4,3 +4,26 @@ body {
   font-family: helvetica;
   text-align: center;
 }
+
+.link-container {
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: darkslateblue;
+}
+
+a:active {
+  color: red;
+}
+
+.link {
+  padding: 10px;
+  background: dodgerblue;
+  border-radius: 10px;
+}
