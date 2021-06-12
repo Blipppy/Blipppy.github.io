@@ -129,6 +129,7 @@ class Board {
         
         translate(leftMargin, topMargin);
 
+        // draw squares
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 let globalPos = (y * this.width) + x;
@@ -156,11 +157,25 @@ class Board {
             }
         }
 
+        // draw board edge
         stroke(255);
         strokeWeight(2);
         line(0, 0, 0, boardHeight);
         line(0, boardHeight, boardWidth, boardHeight);
         line(boardWidth, 0, boardWidth, boardHeight);
+
+        // draw next piece frame
+        line(boardWidth, 0, boardWidth + cellSize * 5, 0);
+        line(boardWidth + cellSize * 5, 0, boardWidth + cellSize * 5, cellSize * 5);
+        line(boardWidth + cellSize * 5, cellSize * 5, boardWidth, cellSize * 5);
+        fill(255);
+        noStroke();
+        rect(boardWidth, 0, cellSize * 5, cellSize * 1.5);
+        
+        noStroke();
+        fill(0);
+        textSize(cellSize);
+        text('NEXT', boardWidth + cellSize * 0.25, 0, cellSize * 5, cellSize * 1.5);
 
         translate(-leftMargin, -topMargin);
     }
