@@ -116,11 +116,7 @@ class Board {
         return false;
       }
     }
-
-    return true;
   }
-
-  doGameTick(gravity = true) {}
 
   draw(cellSize) {
     let originalY = this.tetromino.pos.y;
@@ -132,15 +128,16 @@ class Board {
 
     let boardWidth = cellSize * this.width;
     let boardHeight = cellSize * this.height;
-    
-    let leftMargin = (width - cellSize * this.width) / 2;
-    let topMargin = (height - cellSize * this.height) / 2;
 
+    let leftMargin = (width - (cellSize * this.width)) / 2;
+    let topMargin = (height - (cellSize * this.height)) / 2;
+    
     translate(leftMargin, topMargin);
 
+    // draw squares
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        let globalPos = y * this.width + x;
+        let globalPos = (y * this.width) + x;
         if (this.blocks[globalPos]) {
           noStroke();
           fill(this.blocks[globalPos]);
@@ -165,11 +162,25 @@ class Board {
       }
     }
 
+    // draw board edge
     stroke(255);
     strokeWeight(2);
     line(0, 0, 0, boardHeight);
     line(0, boardHeight, boardWidth, boardHeight);
     line(boardWidth, 0, boardWidth, boardHeight);
+
+    // draw next piece frame
+    line(boardWidth, 0, boardWidth + cellSize * 5, 0);
+    line(boardWidth + cellSize * 5, 0, boardWidth + cellSize * 5, cellSize * 5);
+    line(boardWidth + cellSize * 5, cellSize * 5, boardWidth, cellSize * 5);
+    fill(255);
+    noStroke();
+    rect(boardWidth, 0, cellSize * 5, cellSize * 1.5);
+    
+    noStroke();
+    fill(0);
+    textSize(cellSize);
+    text('NEXT', boardWidth + cellSize * 0.25, 0, cellSize * 5, cellSize * 1.5);
 
     translate(-leftMargin, -topMargin);
   }
