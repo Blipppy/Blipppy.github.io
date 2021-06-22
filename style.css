@@ -3,6 +3,14 @@ body {
   color: white;
   font-family: helvetica;
   text-align: center;
+  margin: 0;
+}
+
+#page-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .link-container {
@@ -12,6 +20,8 @@ body {
 
 a {
   color: white;
+  text-decoration: none;
+  transition: 30ms;
 }
 
 a:hover {
