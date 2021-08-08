@@ -111,10 +111,20 @@ class Board {
       }
     }
 
-<<<<<<< HEAD
     for (const pos of positions) {
       if (this.blocks[pos]) {
         return false;
+      }
+    }
+  }
+
+  clearLines() {
+    let lines = [];
+    let temp = [];
+
+    for (let i = 0; i < this.blocks.length; i++) {
+      if (this.blocks[i]) {
+        arr.push("a");
       }
     }
   }
@@ -130,15 +140,15 @@ class Board {
     let boardWidth = cellSize * this.width;
     let boardHeight = cellSize * this.height;
 
-    let leftMargin = (width - (cellSize * this.width)) / 2;
-    let topMargin = (height - (cellSize * this.height)) / 2;
-    
+    let leftMargin = (width - cellSize * this.width) / 2;
+    let topMargin = (height - cellSize * this.height) / 2;
+
     translate(leftMargin, topMargin);
 
     // draw squares
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        let globalPos = (y * this.width) + x;
+        let globalPos = y * this.width + x;
         if (this.blocks[globalPos]) {
           noStroke();
           fill(this.blocks[globalPos]);
@@ -146,6 +156,7 @@ class Board {
           noStroke();
           fill(this.tetromino.color);
         } else if (preview.includes(globalPos)) {
+          console.log(globalPos);
           let c = color(this.tetromino.color);
           c.setAlpha(75);
           noStroke();
@@ -161,73 +172,6 @@ class Board {
         }
         square(x * cellSize, y * cellSize, cellSize);
       }
-=======
-    draw(cellSize) {
-        let originalY = this.tetromino.pos.y;
-
-        while (this.drop()) {}
-
-        let preview = this.tetromino.getGlobalPos();
-        this.tetromino.pos.y = originalY;
-
-        let boardWidth = cellSize * this.width;
-        let boardHeight = cellSize * this.height;
-
-        let leftMargin = (width - (cellSize * this.width)) / 2;
-        let topMargin = (height - (cellSize * this.height)) / 2;
-        
-        translate(leftMargin, topMargin);
-
-        // draw squares
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                let globalPos = (y * this.width) + x;
-                if (this.blocks[globalPos]) {
-                    noStroke();
-                    fill(this.blocks[globalPos]);
-                } else if (this.tetromino.getGlobalPos().includes(globalPos)) {
-                    noStroke();
-                    fill(this.tetromino.color);
-                } else if (preview.includes(globalPos)) {
-                    let c = color(this.tetromino.color);
-                    c.setAlpha(75);
-                    noStroke();
-                    fill(c);
-                    // stroke(c);
-                    // strokeWeight(3);
-                    // noFill();
-                    // square((x * cellSize) + (cellSize * 0.1), (y * cellSize) + (cellSize * 0.1), cellSize * 0.8);
-                } else {
-                    stroke(50);
-                    strokeWeight(1);
-                    noFill();
-                }
-                square(x * cellSize, y * cellSize, cellSize);
-            }
-        }
-
-        // draw board edge
-        stroke(255);
-        strokeWeight(2);
-        line(0, 0, 0, boardHeight);
-        line(0, boardHeight, boardWidth, boardHeight);
-        line(boardWidth, 0, boardWidth, boardHeight);
-
-        // draw next piece frame
-        line(boardWidth, 0, boardWidth + cellSize * 5, 0);
-        line(boardWidth + cellSize * 5, 0, boardWidth + cellSize * 5, cellSize * 5);
-        line(boardWidth + cellSize * 5, cellSize * 5, boardWidth, cellSize * 5);
-        fill(255);
-        noStroke();
-        rect(boardWidth, 0, cellSize * 5, cellSize * 1.5);
-        
-        noStroke();
-        fill(0);
-        textSize(cellSize);
-        text('NEXT', boardWidth + cellSize * 0.25, 0, cellSize * 5, cellSize * 1.5);
-
-        translate(-leftMargin, -topMargin);
->>>>>>> d1e99738c68cb357a21ec864a7fa6c5d6721bc99
     }
 
     // draw board edge
@@ -238,19 +182,25 @@ class Board {
     line(boardWidth, 0, boardWidth, boardHeight);
 
     // draw next piece frame
-    line(boardWidth, 0, boardWidth + cellSize * 5, 0);
-    line(boardWidth + cellSize * 5, 0, boardWidth + cellSize * 5, cellSize * 5);
-    line(boardWidth + cellSize * 5, cellSize * 5, boardWidth, cellSize * 5);
+    translate(boardWidth, 0);
+    line(0, 0, cellSize * 5, 0);
+    line(cellSize * 5, 0, cellSize * 5, cellSize * 5);
+    line(cellSize * 5, cellSize * 5, 0, cellSize * 5);
     fill(255);
     noStroke();
-    rect(boardWidth, 0, cellSize * 5, cellSize * 1.5);
-    
+    rect(0, 0, cellSize * 5, cellSize * 1.5);
+
     noStroke();
     fill(0);
     textSize(cellSize);
-    text('NEXT', boardWidth + cellSize * 0.25, 0, cellSize * 5, cellSize * 1.5);
+    textAlign(CENTER, CENTER);
+    text("NEXT", 0, 0, cellSize * 5, cellSize * 1.5);
 
-    translate(-leftMargin, -topMargin);
+    // draw next piece
+    // const next = this.bag[0];
+
+    textAlign(LEFT, TOP);
+    translate(-boardWidth + -leftMargin, -topMargin);
   }
 }
 
