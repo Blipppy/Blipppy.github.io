@@ -1,5 +1,9 @@
 const artyom = new Artyom();
 
+let edgework = {
+  serial: '',
+};
+
 const wiresCommands = [
   {
     smart: true,
@@ -20,10 +24,57 @@ const wiresCommands = [
           }
           break;
         case 4:
+          if (
+            countOccurences(colors, 'red') > 1 &&
+            parseInt(edgework.serial[edgework.serial.length - 1]) % 2 == 1
+          ) {
+            artyom.say((colors.lastIndexOf('red') + 1).toString());
+          } else if (
+            colors[colors.length - 1] == 'yellow' &&
+            countOccurences(colors, 'red') == 0
+          ) {
+            artyom.say('1');
+          } else if (countOccurences(colors, 'blue') == 1) {
+            artyom.say('1');
+          } else if (countOccurences(colors, 'yellow') > 1) {
+            artyom.say('4');
+          } else {
+            artyom.say('2');
+          }
           break;
         case 5:
+          if (
+            colors[colors.length - 1] === 'black' &&
+            parseInt(edgework.serial[edgework.serial.length - 1]) % 2 == 1
+          ) {
+            artyom.say('4');
+          } else if (
+            countOccurrences(colors, 'red') == 1 &&
+            countOccurrences(colors, 'yellow') >= 1
+          ) {
+            artyom.say('1');
+          } else if (countOccurences(colors, 'black') == 0) {
+            artyom.say('2');
+          } else {
+            artyom.say('1');
+          }
           break;
         case 6:
+          if (
+            countOccurrences(colors, 'yellow') == 0 &&
+            parseInt(edgework.serial[edgework.serial.length - 1]) % 2 == 1
+          ) {
+            artyom.say('3');
+          } else if (
+            countOccurrences(colors, 'yellow') == 1 &&
+            countOccurrences(colors, 'white') > 1
+          ) {
+            artyom.say('4');
+          } else if (countOccurrences(colors, 'red') == 0) {
+            artyom.say('6');
+          } else {
+            artyom.say('4');
+          }
           break;
         default:
           artyom.say('try again');
@@ -34,49 +85,104 @@ const wiresCommands = [
     indexes: ['done'],
     action: function () {
       artyom.emptyCommands();
-      artyom.addCommands(moduleCommands);
+      artyom.addCommands(mainCommands);
       artyom.say('ready');
     },
   },
 ];
 
-const moduleCommands = {
-  indexes: ['wire'],
-  action: function (i, wildcard) {
-    artyom.emptyCommands();
-    artyom.addCommands(wiresCommands);
-    artyom.say('ready');
+const mainCommands = [
+  {
+    indexes: ['wire'],
+    action: function (i, wildcard) {
+      artyom.emptyCommands();
+      artyom.addCommands(wiresCommands);
+      artyom.say('ready');
+    },
   },
-};
+  {
+    smart: true,
+    indexes: ['serial *', 'cereal *'], // https://www.reddit.com/r/TIHI
+    action: function (i, wildcard) {
+      natoPhonAlph = {
+        'alpha': 'A',
+        'bravo': 'B',
+        'charlie': 'C',
+        'delta': 'D',
+        'echo': 'E',
+        'foxtrot': 'F',
+        'golf': 'G',
+        'hotel': 'H',
+        'india': 'I',
+        'juliet': 'J',
+        'kilo': 'K',
+        'lima': 'L',
+        'mike': 'M',
+        'november': 'N',
+        'oscar': 'O',
+        'papa': 'P',
+        'quebec': 'Q',
+        'romeo': 'R',
+        'sierra': 'S',
+        'tango': 'T',
+        'uniform': 'U',
+        'victor': 'V',
+        'whiskey': 'W',
+        'x-ray': 'X',
+        'yankee': 'Y',
+        'zulu': 'Z',
+      };
+      let serial = '';
+      let chars = wildcard.split(' ').map((c) => {
+        if (c.match(/^\d+$/gi)) {
+          return c.split('');
+        } else {
+          return c;
+        }
+      });
+      chars = chars.flat();
+      console.log(chars);
+      for (const char of chars) {
+        serial += char.match(/\d/)
+          ? char
+          : natoPhonAlph[char] || intFromText(char);
+      }
+      edgework.serial = serial;
+      let element = document.getElementById('edgework');
+      element.innerHTML = `serial: ${edgework.serial}`;
+    },
+  },
+];
 
-artyom.addCommands(moduleCommands); // Add the command with addCommands method. Now
+artyom.addCommands(mainCommands);
 
 function startOneCommandArtyom() {
-  artyom.fatality(); // use this to stop any of
+  artyom.fatality();
 
   setTimeout(function () {
-    // if you use artyom.fatality , wait 250 ms to initialize again.
     artyom
       .initialize({
-        lang: 'en-US', // A lot of languages are supported. Read the docs !
-        continuous: true, // recognize 1 command and stop listening !
-        listen: true, // Start recognizing
-        debug: true, // Show everything in the console
-        speed: 1, // talk normally
+        lang: 'en-US',
+        continuous: true,
+        listen: true,
+        debug: true,
+        speed: 1,
       })
       .then(function () {
         console.log('Ready to work!');
+        artyom.say('started');
       });
   }, 250);
 }
 
 function stopArtyom() {
   artyom.emptyCommands();
-  artyom.addCommands(moduleCommands);
+  artyom.addCommands(mainCommands);
+  artyom.say('shutting down');
   artyom.fatality();
 }
 
-// start piracy
+// <piracy>
 
 countOccurrences = (arr, val) =>
   arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
@@ -148,7 +254,9 @@ function feach(w) {
       n = n + g * x;
       g = 0;
     } else {
-      alert('Unknown number: ' + w);
+      console.log('cry about it');
     }
   }
 }
+
+// </piracy>
