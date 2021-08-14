@@ -5,11 +5,15 @@ class Board {
     this.blocks = new Array(width * height);
     this.bag = shuffle(dicts.pieces.slice(0));
     this.tetromino = new Tetromino(this.bag.splice(0, 1));
+    this.animation = false;
+    this.currAnimFrame = 0;
 
-    this.blocks[52] = "yellow";
-    this.blocks[57] = "yellow";
-    // this.blocks[47] = 'yellow';
-    // this.blocks[71] = 'yellow';
+    // this.blocks[50] = "yellow";
+    // this.blocks[59] = "yellow";
+
+    for (let i = 50; i < 60; i++) {
+      this.blocks[i] = 'yellow';
+    }
 
     return this;
   }
@@ -45,8 +49,8 @@ class Board {
   }
 
   rotate(dir) {
-    if (dir == "cw") {
-      this.tetromino.rotation++;
+      let increment = dir == 'cw' ? 1 : 0;
+      this.tetromino.rotation += increment;
       this.tetromino.grid =
         dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
       for (const shift of dicts.kicks[this.tetromino.piece][
@@ -60,33 +64,10 @@ class Board {
         this.tetromino.pos.x -= shift[0];
         this.tetromino.pos.y -= shift[1];
       }
-      this.tetromino.rotation--;
+      this.tetromino.rotation -= increment;
       this.tetromino.grid =
         dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
       return false;
-    } else if (dir == "ccw") {
-      this.tetromino.rotation--;
-      if (this.tetromino.rotation < 0) {
-        this.tetromino.rotation = 3;
-      }
-      this.tetromino.grid =
-        dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
-      for (const shift of dicts.kicks[this.tetromino.piece][
-        (this.tetromino.rotation + 1) % 4
-      ][dir]) {
-        this.tetromino.pos.x += shift[0];
-        this.tetromino.pos.y += shift[1];
-        if (this.verifyPosition()) {
-          return true;
-        }
-        this.tetromino.pos.x -= shift[0];
-        this.tetromino.pos.y -= shift[1];
-      }
-      this.tetromino.rotation++;
-      this.tetromino.grid =
-        dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
-      return false;
-    }
   }
 
   place() {
@@ -116,25 +97,57 @@ class Board {
         return false;
       }
     }
+
+    return true;
   }
 
-  clearLines() {
+  getLines() {
     let lines = [];
-    let temp = [];
 
-    for (let i = 0; i < this.blocks.length; i++) {
-      if (this.blocks[i]) {
-        arr.push("a");
+    for (let i = 0; i < this.height; i++) {
+      if (this.checkLine(i)) {
+        lines.push(i);
       }
     }
+
+    return lines;
+  }
+
+  checkLine(line) {
+    for (let j = 0; j < this.width; j++) {
+      if (!this.blocks[line * this.width + j]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  clearLines() {
+    let lines = this.getLines();
+    let clearedLines = 0;
+    for (let i = this.height - 1; i >= 0; i--) {
+      if (lines.includes(i)) {
+        for (let j = 0; j < this.width; j++) {
+          this.blocks[i * this.width + j] = undefined;
+        }
+        clearedLines++;
+      } else {
+        for (let j = 0; j < this.width; j++) {
+          this.blocks[(i + clearedLines) * this.width + j] = this.blocks[i * this.width + j]
+        }
+      }
+    }
+    return lines;
   }
 
   draw(cellSize) {
+    this.clearLines();
+
     let originalY = this.tetromino.pos.y;
 
     while (this.drop()) {}
 
-    let preview = this.tetromino.getGlobalPos();
+    let ghost = this.tetromino.getGlobalPos();
     this.tetromino.pos.y = originalY;
 
     let boardWidth = cellSize * this.width;
@@ -150,21 +163,26 @@ class Board {
       for (let x = 0; x < this.width; x++) {
         let globalPos = y * this.width + x;
         if (this.blocks[globalPos]) {
-          noStroke();
+          strokeWeight(1);
+          stroke(this.blocks[globalPos])
           fill(this.blocks[globalPos]);
         } else if (this.tetromino.getGlobalPos().includes(globalPos)) {
-          noStroke();
+          strokeWeight(1);
+          stroke(this.tetromino.color)
           fill(this.tetromino.color);
-        } else if (preview.includes(globalPos)) {
-          console.log(globalPos);
+        } else if (ghost.includes(globalPos)) {
           let c = color(this.tetromino.color);
           c.setAlpha(75);
-          noStroke();
+          strokeWeight(1);  
+          stroke(c)
           fill(c);
           // stroke(c);
           // strokeWeight(3);
           // noFill();
           // square((x * cellSize) + (cellSize * 0.1), (y * cellSize) + (cellSize * 0.1), cellSize * 0.8);
+          // stroke(50);
+          // strokeWeight(1);
+          // noFill();
         } else {
           stroke(50);
           strokeWeight(1);

@@ -8,6 +8,7 @@ let lastDropTime = 1;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   frameRate(targetFramerate);
+  console.log(board.getLines());
 }
 
 function draw() {
@@ -57,6 +58,8 @@ function keyPressed() {
       board.drop();
     }
   }
+  
+  // hard drop
 }
 
 // DEBUG STUFF, REMOVE LATER
@@ -67,6 +70,9 @@ function keyTyped() {
   }
   if (key == "r") {
     board.blocks = new Array(width * height);
+  }
+  if (key == "p") {
+    board.place();
   }
 
   if (key == "b") {
