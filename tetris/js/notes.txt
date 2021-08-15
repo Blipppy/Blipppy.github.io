@@ -1,0 +1,15 @@
+THINGS TO CHECK EVERY GAME TICK
+ - check for lines
+ - check for animation
+ - keys pressed
+ - if gravity should happen
+
+THINGS TO EXECUTE
+ - hard drop
+ - shifting
+ - rotation
+ - gravity/soft drop
+
+MISC NOTES
+soft drop resets gravity timer?
+dont gravity if soft drop key is held
