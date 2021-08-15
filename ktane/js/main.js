@@ -4,6 +4,18 @@ let edgework = {
   serial: '',
 };
 
+const Commands = [
+  {},
+  {
+    indexes: ['done'],
+    action: function () {
+      artyom.emptyCommands();
+      artyom.addCommands(mainCommands);
+      artyom.say('ready');
+    },
+  },
+];
+
 const wiresCommands = [
   {
     smart: true,
@@ -151,6 +163,9 @@ const mainCommands = [
       let element = document.getElementById('edgework');
       element.innerHTML = `serial: ${edgework.serial}`;
     },
+  },
+  {
+    smart: true,
   },
 ];
 
