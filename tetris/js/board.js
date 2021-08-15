@@ -1,5 +1,5 @@
 class Board {
-  constructor(width = 10, height = 20) {
+  constructor(width = 10, height = 40) {
     this.width = width;
     this.height = height;
     this.blocks = new Array(width * height);
@@ -11,9 +11,9 @@ class Board {
     // this.blocks[50] = "yellow";
     // this.blocks[59] = "yellow";
 
-    for (let i = 50; i < 60; i++) {
-      this.blocks[i] = 'yellow';
-    }
+    // for (let i = 50; i < 60; i++) {
+    //   this.blocks[i] = 'yellow';
+    // }
 
     return this;
   }
@@ -29,7 +29,7 @@ class Board {
   }
 
   shift(dir) {
-    if (dir == "left") {
+    if (dir == 'left') {
       this.tetromino.pos.x--;
       if (this.verifyPosition()) {
         return true;
@@ -37,7 +37,7 @@ class Board {
         this.tetromino.pos.x++;
         return false;
       }
-    } else if (dir == "right") {
+    } else if (dir == 'right') {
       this.tetromino.pos.x++;
       if (this.verifyPosition()) {
         return true;
@@ -49,25 +49,25 @@ class Board {
   }
 
   rotate(dir) {
-      let increment = dir == 'cw' ? 1 : 0;
-      this.tetromino.rotation += increment;
-      this.tetromino.grid =
-        dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
-      for (const shift of dicts.kicks[this.tetromino.piece][
-        (this.tetromino.rotation - 1) % 4
-      ][dir]) {
-        this.tetromino.pos.x += shift[0];
-        this.tetromino.pos.y += shift[1];
-        if (this.verifyPosition()) {
-          return true;
-        }
-        this.tetromino.pos.x -= shift[0];
-        this.tetromino.pos.y -= shift[1];
+    let increment = dir == 'cw' ? 1 : 0;
+    this.tetromino.rotation += increment;
+    this.tetromino.grid =
+      dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
+    for (const shift of dicts.kicks[this.tetromino.piece][
+      (this.tetromino.rotation - 1) % 4
+    ][dir]) {
+      this.tetromino.pos.x += shift[0];
+      this.tetromino.pos.y += shift[1];
+      if (this.verifyPosition()) {
+        return true;
       }
-      this.tetromino.rotation -= increment;
-      this.tetromino.grid =
-        dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
-      return false;
+      this.tetromino.pos.x -= shift[0];
+      this.tetromino.pos.y -= shift[1];
+    }
+    this.tetromino.rotation -= increment;
+    this.tetromino.grid =
+      dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
+    return false;
   }
 
   place() {
@@ -121,7 +121,7 @@ class Board {
     }
     return true;
   }
-  
+
   clearLines() {
     let lines = this.getLines();
     let clearedLines = 0;
@@ -133,7 +133,8 @@ class Board {
         clearedLines++;
       } else {
         for (let j = 0; j < this.width; j++) {
-          this.blocks[(i + clearedLines) * this.width + j] = this.blocks[i * this.width + j]
+          this.blocks[(i + clearedLines) * this.width + j] =
+            this.blocks[i * this.width + j];
         }
       }
     }
@@ -151,30 +152,30 @@ class Board {
     this.tetromino.pos.y = originalY;
 
     let boardWidth = cellSize * this.width;
-    let boardHeight = cellSize * this.height;
+    let boardHeight = (cellSize * this.height) / 2;
 
     let leftMargin = (width - cellSize * this.width) / 2;
-    let topMargin = (height - cellSize * this.height) / 2;
+    let topMargin = (height - cellSize * (this.height / 2)) / 2;
 
     translate(leftMargin, topMargin);
 
     // draw squares
-    for (let y = 0; y < this.height; y++) {
+    for (let y = this.height / 2; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         let globalPos = y * this.width + x;
         if (this.blocks[globalPos]) {
           strokeWeight(1);
-          stroke(this.blocks[globalPos])
+          stroke(this.blocks[globalPos]);
           fill(this.blocks[globalPos]);
         } else if (this.tetromino.getGlobalPos().includes(globalPos)) {
           strokeWeight(1);
-          stroke(this.tetromino.color)
+          stroke(this.tetromino.color);
           fill(this.tetromino.color);
         } else if (ghost.includes(globalPos)) {
           let c = color(this.tetromino.color);
           c.setAlpha(75);
-          strokeWeight(1);  
-          stroke(c)
+          strokeWeight(1);
+          stroke(c);
           fill(c);
           // stroke(c);
           // strokeWeight(3);
@@ -188,9 +189,44 @@ class Board {
           strokeWeight(1);
           noFill();
         }
+        square(x * cellSize, (y - this.height / 2) * cellSize, cellSize);
+      }
+    }
+
+    // render minoes off the top
+    translate(0, -(cellSize * (this.height / 2)));
+    for (let y = this.height / 2 - 4; y < this.height / 2; y++) {
+      for (let x = 0; x < this.width; x++) {
+        let globalPos = y * this.width + x;
+        if (this.blocks[globalPos]) {
+          strokeWeight(1);
+          stroke(this.blocks[globalPos]);
+          fill(this.blocks[globalPos]);
+        } else if (this.tetromino.getGlobalPos().includes(globalPos)) {
+          strokeWeight(1);
+          stroke(this.tetromino.color);
+          fill(this.tetromino.color);
+        } else if (ghost.includes(globalPos)) {
+          let c = color(this.tetromino.color);
+          c.setAlpha(75);
+          strokeWeight(1);
+          stroke(c);
+          fill(c);
+          // stroke(c);
+          // strokeWeight(3);
+          // noFill();
+          // square((x * cellSize) + (cellSize * 0.1), (y * cellSize) + (cellSize * 0.1), cellSize * 0.8);
+          // stroke(50);
+          // strokeWeight(1);
+          // noFill();
+        } else {
+          noStroke();
+          noFill();
+        }
         square(x * cellSize, y * cellSize, cellSize);
       }
     }
+    translate(0, cellSize * (this.height / 2));
 
     // draw board edge
     stroke(255);
@@ -212,7 +248,7 @@ class Board {
     fill(0);
     textSize(cellSize);
     textAlign(CENTER, CENTER);
-    text("NEXT", 0, 0, cellSize * 5, cellSize * 1.5);
+    text('NEXT', 0, 0, cellSize * 5, cellSize * 1.5);
 
     // draw next piece
     // const next = this.bag[0];
@@ -227,8 +263,8 @@ class Board {
 const isKeyDown = (() => {
   const state = {};
 
-  window.addEventListener("keyup", (e) => (state[e.key] = false));
-  window.addEventListener("keydown", (e) => (state[e.key] = true));
+  window.addEventListener('keyup', (e) => (state[e.key] = false));
+  window.addEventListener('keydown', (e) => (state[e.key] = true));
 
   return (key) => (state.hasOwnProperty(key) && state[key]) || false;
 })();

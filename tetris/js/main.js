@@ -15,9 +15,9 @@ function draw() {
   background(0);
 
   board.draw(
-    ((height * 0.8) / board.height) * board.width < width * 0.8
-      ? (height * 0.8) / board.height
-      : (width * 0.8) / board.width
+    ((height * 0.8) / (board.height / 2)) * board.width < width * 0.8
+      ? (height * 0.8) / (board.height / 2)
+      : (width * 0.8) / (board.height / 2)
   );
 
   // let drop = true;
@@ -36,7 +36,7 @@ function draw() {
   textSize(30);
   if (frameCount % 30 == 0) currFramerate = int(frameRate());
   text(`fps: ${currFramerate}`, 10, 10, 100, 30);
-  text("debug build", 10, 50, 600, 30);
+  text('debug build', 10, 50, 600, 30);
 }
 
 function windowResized() {
@@ -45,11 +45,11 @@ function windowResized() {
 
 function keyPressed() {
   if (keyCode == LEFT_ARROW) {
-    board.shift("left");
+    board.shift('left');
   } else if (keyCode == RIGHT_ARROW) {
-    board.shift("right");
+    board.shift('right');
   } else if (keyCode == UP_ARROW) {
-    board.rotate("cw");
+    board.rotate('cw');
   } else if (keyCode == DOWN_ARROW) {
     let drop = board.drop();
     if (!drop) {
@@ -57,8 +57,13 @@ function keyPressed() {
       lastDropTime = Date.now();
       board.drop();
     }
+  } else if (keyCode == SPACE) {
+    while (board.drop()) {}
+    board.place();
+    lastDropTime = Date.now();
+    board.drop();
   }
-  
+
   // hard drop
 }
 
@@ -68,16 +73,16 @@ function keyTyped() {
   if (/^[ijlostz]$/i.test(key)) {
     board.tetromino = new Tetromino(key);
   }
-  if (key == "r") {
+  if (key == 'r') {
     board.blocks = new Array(width * height);
   }
-  if (key == "p") {
+  if (key == 'p') {
     board.place();
   }
 
-  if (key == "b") {
-    board.rotate("cw");
-  } else if (key == "v") {
-    board.rotate("ccw");
+  if (key == 'b') {
+    board.rotate('cw');
+  } else if (key == 'v') {
+    board.rotate('ccw');
   }
 }
