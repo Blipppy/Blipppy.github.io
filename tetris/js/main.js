@@ -57,11 +57,6 @@ function keyPressed() {
       lastDropTime = Date.now();
       board.drop();
     }
-  } else if (keyCode == SPACE) {
-    while (board.drop()) {}
-    board.place();
-    lastDropTime = Date.now();
-    board.drop();
   }
 
   // hard drop
@@ -78,6 +73,12 @@ function keyTyped() {
   }
   if (key == 'p') {
     board.place();
+  }
+  if (key == ' ') {
+    while (board.drop()) {}
+    board.place();
+    lastDropTime = Date.now();
+    board.drop();
   }
 
   if (key == 'b') {
