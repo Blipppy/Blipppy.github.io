@@ -3,7 +3,8 @@ class Game {
     this.board = new Board();
     this.config = {
       das: 10,
-      arr: 2
+      arr: 2,
+      sds: 4
     };
     this.keybinds = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'z', 'x', 'c', ' '];
     this.heldKeys = this.keybinds.reduce(
@@ -64,16 +65,28 @@ class Game {
       }
     }
 
-    if (leftShift == true) {
-      this.board.shift('left');
-    }
-    if (rightShift == true) {
-      this.board.shift('right');
-    }
+    if (leftShift == true) this.board.shift('left');
+    if (rightShift == true) this.board.shift('right');
 
     // - rotation
-    // - gravity/soft drop
+    if (keys['ArrowUp'] == true && this.heldKeys['ArrowUp'] == 0) this.board.rotate('cw');
 
+    // - gravity/soft drop
+    let softDrop = false;
+
+    if (keys['ArrowDown'] == true) {
+      if (this.heldKeys['ArrowDown'] == 0) {
+        softDrop = true;
+      } else if (this.heldKeys['ArrowDown'] % this.config.sds == 0) {
+        softDrop = true;
+      }
+    }
+
+    if (softDrop == true) {
+      this.board.drop();
+    }
+
+    // update held key frames
     for (const key in keys) {
       if (keys[key] == true) {
         this.heldKeys[key] += 1;

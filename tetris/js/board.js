@@ -51,11 +51,8 @@ class Board {
   rotate(dir) {
     let increment = dir == 'cw' ? 1 : 0;
     this.tetromino.rotation += increment;
-    this.tetromino.grid =
-      dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
-    for (const shift of dicts.kicks[this.tetromino.piece][
-      (this.tetromino.rotation - 1) % 4
-    ][dir]) {
+    this.tetromino.grid = dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
+    for (const shift of dicts.kicks[this.tetromino.piece][(this.tetromino.rotation - 1) % 4][dir]) {
       this.tetromino.pos.x += shift[0];
       this.tetromino.pos.y += shift[1];
       if (this.verifyPosition()) {
@@ -65,8 +62,7 @@ class Board {
       this.tetromino.pos.y -= shift[1];
     }
     this.tetromino.rotation -= increment;
-    this.tetromino.grid =
-      dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
+    this.tetromino.grid = dicts.pieceInfo.grid[this.tetromino.piece][this.tetromino.rotation % 4];
     return false;
   }
 
@@ -134,8 +130,7 @@ class Board {
         clearedLines++;
       } else {
         for (let j = 0; j < this.width; j++) {
-          this.blocks[(i + clearedLines) * this.width + j] =
-            this.blocks[i * this.width + j];
+          this.blocks[(i + clearedLines) * this.width + j] = this.blocks[i * this.width + j];
         }
       }
     }
@@ -178,13 +173,6 @@ class Board {
           strokeWeight(1);
           stroke(c);
           fill(c);
-          // stroke(c);
-          // strokeWeight(3);
-          // noFill();
-          // square((x * cellSize) + (cellSize * 0.1), (y * cellSize) + (cellSize * 0.1), cellSize * 0.8);
-          // stroke(50);
-          // strokeWeight(1);
-          // noFill();
         } else {
           stroke(50);
           strokeWeight(1);
@@ -213,13 +201,6 @@ class Board {
           strokeWeight(1);
           stroke(c);
           fill(c);
-          // stroke(c);
-          // strokeWeight(3);
-          // noFill();
-          // square((x * cellSize) + (cellSize * 0.1), (y * cellSize) + (cellSize * 0.1), cellSize * 0.8);
-          // stroke(50);
-          // strokeWeight(1);
-          // noFill();
         } else {
           noStroke();
           noFill();

@@ -21,17 +21,6 @@ function draw() {
       : (width * 0.8) / (game.board.height / 2)
   );
 
-  // let drop = true;
-  // if (Date.now() - lastDropTime > 100) {
-  //     lastDropTime = Date.now();
-  //     drop = board.drop();
-  // }
-  // if (!drop) {
-  //     board.place();
-  //     lastDropTime = Date.now();
-  //     board.drop();
-  // }
-
   noStroke();
   fill(255);
   textSize(30);
@@ -43,44 +32,3 @@ function draw() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
-// function keyPressed() {
-//   if (keyCode == LEFT_ARROW) {
-//     board.shift('left');
-//   } else if (keyCode == RIGHT_ARROW) {
-//     board.shift('right');
-//   } else if (keyCode == UP_ARROW) {
-//     board.rotate('cw');
-//   } else if (keyCode == DOWN_ARROW) {
-//     let drop = board.drop();
-//     if (!drop) {
-//       board.place();
-//       lastDropTime = Date.now();
-//       board.drop();
-//     }
-//   }
-// }
-
-// function keyTyped() {
-//   if (/^[ijlostz]$/i.test(key)) {
-//     board.tetromino = new Tetromino(key);
-//   }
-//   if (key == 'r') {
-//     board.blocks = new Array(width * height);
-//   }
-//   if (key == 'p') {
-//     board.place();
-//   }
-//   if (key == ' ') {
-//     while (board.drop()) {}
-//     board.place();
-//     lastDropTime = Date.now();
-//     board.drop();
-//   }
-
-//   if (key == 'b') {
-//     board.rotate('cw');
-//   } else if (key == 'v') {
-//     board.rotate('ccw');
-//   }
-// }
