@@ -78,6 +78,7 @@ class Board {
     if (this.bag.length <= 0) {
       this.bag = shuffle(dicts.pieces.slice(0));
     }
+    this.drop();
   }
 
   verifyPosition() {
@@ -259,15 +260,6 @@ class Board {
 }
 
 // def not copy pasted from stack overflow
-
-const isKeyDown = (() => {
-  const state = {};
-
-  window.addEventListener('keyup', (e) => (state[e.key] = false));
-  window.addEventListener('keydown', (e) => (state[e.key] = true));
-
-  return (key) => (state.hasOwnProperty(key) && state[key]) || false;
-})();
 
 const shuffle = (array) => {
   for (let i = array.length - 1; i > 0; i--) {

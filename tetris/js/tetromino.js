@@ -15,7 +15,7 @@ class Tetromino {
       if (this.grid[i] == 1) {
         let x = this.pos.x + (i % this.width);
         let y = this.pos.y + Math.floor(i / this.width);
-        minoes.push(y * board.width + x);
+        minoes.push(y * game.board.width + x);
       }
     }
 
