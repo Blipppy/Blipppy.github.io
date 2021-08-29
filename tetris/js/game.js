@@ -14,6 +14,7 @@ class Game {
       }),
       {}
     );
+    this.lastDropTime = 0;
   }
 
   doGameTick() {
@@ -72,18 +73,21 @@ class Game {
     if (keys['ArrowUp'] == true && this.heldKeys['ArrowUp'] == 0) this.board.rotate('cw');
 
     // - gravity/soft drop
-    let softDrop = false;
+    let drop = false;
 
-    if (keys['ArrowDown'] == true) {
+    if (Date.now() - this.lastDropTime >= 1000) {
+      drop = true;
+    } else if (keys['ArrowDown'] == true) {
       if (this.heldKeys['ArrowDown'] == 0) {
-        softDrop = true;
+        drop = true;
       } else if (this.heldKeys['ArrowDown'] % this.config.sds == 0) {
-        softDrop = true;
+        drop = true;
       }
     }
 
-    if (softDrop == true) {
-      this.board.drop();
+    if (drop == true) {
+      const drop = this.board.drop();
+      if (drop) this.lastDropTime = Date.now();
     }
 
     // update held key frames

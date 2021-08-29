@@ -7,6 +7,10 @@ class Board {
     this.tetromino = new Tetromino(this.bag.splice(0, 1));
     this.animation = false;
     this.currAnimFrame = 0;
+    this.scoring = {
+      currlines: 0,
+      score: 0
+    };
 
     // this.blocks[50] = "yellow";
     // this.blocks[59] = "yellow";
@@ -134,6 +138,7 @@ class Board {
         }
       }
     }
+    this.scoring.lines += clearedLines;
     return lines;
   }
 

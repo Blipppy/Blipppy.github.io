@@ -32,3 +32,9 @@ function draw() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
+function keyTyped() {
+  if (key.match(/[jlzsito]/i)) {
+    game.board.tetromino = new Tetromino(key);
+  }
+}

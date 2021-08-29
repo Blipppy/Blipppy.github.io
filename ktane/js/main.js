@@ -2,6 +2,8 @@ const artyom = new Artyom();
 
 let edgework = {
   serial: '',
+  batteries: 0,
+  batteryPlates 0
 };
 
 const Commands = [
@@ -166,6 +168,11 @@ const mainCommands = [
   },
   {
     smart: true,
+    indexes: ['batteries *'],
+    action: function (i, wildcard) {
+      let data = wildcard.split(' in ')
+      
+    }
   },
 ];
 
