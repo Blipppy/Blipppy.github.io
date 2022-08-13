@@ -38,3 +38,7 @@ a:active {
   background: dodgerblue;
   border-radius: 10px;
 }
+
+#wooLink {
+  text-decoration: underline;
+}
